@@ -18,12 +18,8 @@ def write_tab_row(dr, begin, length, fasta_seq, prev_line):
         'FASTA_seq': fasta_seq
     })
 
-
-def generate_tab_file(path):
-    tab_in_path = path
-    tab_out_path = ".".join([tab_in_path.split(".")[0] + '_NEW', tab_in_path.split(".")[1]])
-    fasta_out_path = ".".join([tab_in_path.split(".")[0], 'fasta'])
-    with open(tab_in_path, newline='') as tab_in_file, open(tab_out_path, mode="w", newline='') as tab_out_file:
+def generate_tab_file(path, out_path):
+    with open(path, newline='') as tab_in_file, open(out_path, mode="w", newline='') as tab_out_file:
 
         # Get the reader
         tab_reader = csv.DictReader(tab_in_file, delimiter='\t')
@@ -67,13 +63,14 @@ def generate_tab_file(path):
                 write_tab_row(tab_writer, begin, length, fasta_seq, prev_line)
                 break
 
-
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('path', help='path to input file')
+    parser.add_argument('input', help='path to input file')
+    parser.add_argument('output', help='path to output file')
     # parser.add_argument('sep', default='\t', help='field delimiter')
+
     args = parser.parse_args()
-    generate_tab_file(args.path)
+    generate_tab_file(args.input, args.output)
 
 
 if __name__ == "__main__":
