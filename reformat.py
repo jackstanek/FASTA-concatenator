@@ -82,12 +82,15 @@ def main():
     os.mkdir(output_path)
     tab_out_path = os.path.join(output_path, 'output.tsv')
     fasta_out_path = os.path.join(output_path, 'output.fasta')
+    print("Writing output to ./" + output_path + "...")
 
     with open(args.input, newline='') as tab_in_file, open(tab_out_path, mode='w', newline='') as tab_out_file:
         generate_tab_file(tab_in_file, tab_out_file)
 
     with open(tab_out_path, mode='r', newline='') as tab_out_file, open(fasta_out_path, mode='w', newline='') as fasta_out_file:
         generate_fasta_file(tab_out_file, fasta_out_file)
+
+    print("Done.")
 
 if __name__ == '__main__':
     main()
