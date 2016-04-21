@@ -18,9 +18,7 @@ def write_tab_row(dr, begin, length, fasta_seq, prev_line):
         'FASTA_seq': fasta_seq
     })
 
-def generate_tab_file(path, out_path):
-    with open(path, newline='') as tab_in_file, open(out_path, mode="w", newline='') as tab_out_file:
-
+def generate_tab_file(tab_in_file, tab_out_file):
         # Get the reader
         tab_reader = csv.DictReader(tab_in_file, delimiter='\t')
 
@@ -70,8 +68,8 @@ def main():
     # parser.add_argument('sep', default='\t', help='field delimiter')
 
     args = parser.parse_args()
-    generate_tab_file(args.input, args.output)
-
+    with open(args.input, newline='') as tab_in_file, open(args.output, mode="w", newline='') as tab_out_file:
+        generate_tab_file(tab_in_file, tab_out_file)
 
 if __name__ == "__main__":
     main()
