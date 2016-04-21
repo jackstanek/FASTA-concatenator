@@ -51,7 +51,7 @@ def generate_tab_file(path):
                     # Write the new row to the output
                     write_tab_row(tab_writer, begin, length, fasta_seq, prev_line)
                     begin, length = curr_line['start'], 0
-                    fasta_seq = ''
+                    fasta_seq = curr_line['FASTA_seq']
 
                 else:
                     # We're on the same transcript, so add to the
