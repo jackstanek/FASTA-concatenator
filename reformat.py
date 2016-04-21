@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os, path
+import os
 
 import csv
 import argparse
@@ -69,28 +69,24 @@ def generate_fasta_file(tab_in_file, fasta_out_file):
     for line in tab_reader:
         fasta_seq = line.pop()
 
-        # Discard length
-        line.pop()
-
         fasta_out_file.write('>' + '_'.join(line) + '\n')
         fasta_out_file.write(fasta_seq + '\n')
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('input', help='path to input file')
-    parser.add_argument('tab_output', help='path to tabular output file')
-    parser.add_argument('fasta_output', help='path to fasta output file')
     # parser.add_argument('sep', default='\t', help='field delimiter')
-
     args = parser.parse_args()
 
     output_path = 'output'
     os.mkdir(output_path)
+    tab_out_path = os.path.join(output_path, 'output.tsv')
+    fasta_out_path = os.path.join(output_path, 'output.fasta')
 
-    with open(args.input, newline='') as tab_in_file, open(args.tab_output, mode='w', newline='') as tab_out_file:
+    with open(args.input, newline='') as tab_in_file, open(tab_out_path, mode='w', newline='') as tab_out_file:
         generate_tab_file(tab_in_file, tab_out_file)
 
-    with open(args.tab_output, mode='r', newline='') as tab_out_file, open(args.fasta_output, mode='w', newline='') as fasta_out_file:
+    with open(tab_out_path, mode='r', newline='') as tab_out_file, open(fasta_out_path, mode='w', newline='') as fasta_out_file:
         generate_fasta_file(tab_out_file, fasta_out_file)
 
 if __name__ == '__main__':
