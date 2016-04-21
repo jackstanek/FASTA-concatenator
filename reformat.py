@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
-import csv, argparse
+import csv
+import argparse
 
 def to_fasta(line):
     pass
@@ -69,7 +70,8 @@ def generate_tab_file(path):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('path')
+    parser.add_argument('path', help='path to input file')
+    # parser.add_argument('sep', default='\t', help='field delimiter')
     args = parser.parse_args()
     generate_tab_file(args.path)
 
