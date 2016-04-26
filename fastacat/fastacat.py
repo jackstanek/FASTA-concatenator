@@ -75,8 +75,16 @@ def generate_fasta_file(tab_in_file, fasta_out_file):
         fasta_out_file.write(fasta_seq + '\n')
 
 def make_output_dir(name):
-    if not os.path.exists(name):
+    run = 1
+    if os.path.exists(name):
+        while os.path.exists(name + str(run)):
+            run += 1
+        newname = name + str(run)
+        os.mkdir(newname)
+        return newname
+    else:
         os.mkdir(name)
+        return name
 
 def fmt_tab_out_path(name):
     return os.path.splitext(name)[0] + '.tsv'
@@ -90,8 +98,7 @@ def main():
     # parser.add_argument('sep', default='\t', help='field delimiter')
     args = parser.parse_args()
 
-    output_path = 'output_' + os.path.splitext(args.input)[0]
-    make_output_dir(output_path)
+    output_path = make_output_dir('output_' + os.path.splitext(args.input)[0])
     tab_out_path = os.path.join(output_path, fmt_tab_out_path(args.input))
     fasta_out_path = os.path.join(output_path, fmt_fasta_out_path(args.input))
     print("Writing output to ./" + output_path + "...")
