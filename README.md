@@ -1,6 +1,8 @@
 FASTA Concatenator
 ==================
 
+[![Build Status](https://travis-ci.org/jackstanek/FASTA-concatenator.svg?branch=master)](https://travis-ci.org/jackstanek/FASTA-concatenator)
+
 # Installation
 
 The easiest way is with `pip`:
