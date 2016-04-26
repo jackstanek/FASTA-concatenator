@@ -8,4 +8,5 @@ setup(name='fastacat',
       author='Jack Stanek',
       author_email='stane064@umn.edu',
       url='https://github.com/jackstanek/FASTA-concatenator',
-      scripts='fastacat')
+      packages=['fastacat'],
+      scripts=['fastacat/cli/fastacat'])

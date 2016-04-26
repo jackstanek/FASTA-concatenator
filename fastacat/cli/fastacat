@@ -1,0 +1,6 @@
+#!/usr/bin/env python3
+
+from fastacat import fastacat
+
+if __name__ == '__main__':
+   fastacat.main()
