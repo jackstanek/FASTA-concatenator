@@ -23,13 +23,15 @@ def generate_tab_file(tab_in_file, tab_out_file):
 
         # Get the writer
         fields = tab_reader.fieldnames.copy()
-        fields.insert(len(fields) - 2, 'length')
+        if not 'length' in fields:
+            fields.insert(len(fields) - 2, 'length')
+
         fields.remove('exon')
 
         tab_writer = csv.DictWriter(tab_out_file, fieldnames=fields, delimiter='\t')
 
         # Get first row, setup for the next rows
-        prev_line = tab_reader.__next__()
+        prev_line = next(tab_reader)
         fasta_seq = prev_line['FASTA_seq']
         begin = int(prev_line['start'])
 
