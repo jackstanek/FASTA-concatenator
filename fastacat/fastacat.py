@@ -74,16 +74,26 @@ def generate_fasta_file(tab_in_file, fasta_out_file):
         fasta_out_file.write('>' + '_'.join(line) + '\n')
         fasta_out_file.write(fasta_seq + '\n')
 
+def make_output_dir(name):
+    if not os.path.exists(name):
+        os.mkdir(name)
+
+def fmt_tab_out_path(name):
+    return os.path.splitext(name)[0] + '.tsv'
+
+def fmt_fasta_out_path(name):
+    return os.path.splitext(name)[0] + '.fasta'
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('input', help='path to input file')
     # parser.add_argument('sep', default='\t', help='field delimiter')
     args = parser.parse_args()
 
-    output_path = 'output'
-    os.mkdir(output_path)
-    tab_out_path = os.path.join(output_path, 'output.tsv')
-    fasta_out_path = os.path.join(output_path, 'output.fasta')
+    output_path = 'output_' + os.path.splitext(args.input)[0]
+    make_output_dir(output_path)
+    tab_out_path = os.path.join(output_path, fmt_tab_out_path(args.input))
+    fasta_out_path = os.path.join(output_path, fmt_fasta_out_path(args.input))
     print("Writing output to ./" + output_path + "...")
 
     with open(args.input, newline='') as tab_in_file, open(tab_out_path, mode='w', newline='') as tab_out_file:
