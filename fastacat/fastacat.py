@@ -70,18 +70,6 @@ def generate_files(tab_in_file, tab_out_file, fasta_out_file):
                 write_fasta_rows(fasta_out_file, begin, length, fasta_seq, prev_line)
                 break
 
-def generate_fasta_file(tab_in_file, fasta_out_file):
-    tab_reader = csv.reader(tab_in_file, delimiter='\t')
-
-    # Throw out first line
-    next(tab_reader, None)
-
-    for line in tab_reader:
-        fasta_seq = line.pop()
-
-        fasta_out_file.write('>' + '_'.join(line) + '\n')
-        fasta_out_file.write(fasta_seq + '\n')
-
 def make_output_dir(name):
     run = 1
     if os.path.exists(name):
