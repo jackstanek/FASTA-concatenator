@@ -5,19 +5,25 @@ import os
 import csv
 import argparse
 
-def write_tab_row(dr, begin, length, fasta_seq, prev_line):
-    dr.writerow({
-        'chr': prev_line['chr'],
+def write_tab_row(dw, begin, length, fasta_seq, prev):
+    dw.writerow({
+        'chr': prev['chr'],
         'start': begin,
-        'stop': prev_line['stop'],
-        'strand': prev_line['strand'],
-        'gene_id': prev_line['gene_id'],
-        'transcript_id': prev_line['transcript_id'],
+        'stop': prev['stop'],
+        'strand': prev['strand'],
+        'gene_id': prev['gene_id'],
+        'transcript_id': prev['transcript_id'],
         'length': length,
         'FASTA_seq': fasta_seq
     })
 
-def generate_tab_file(tab_in_file, tab_out_file):
+def write_fasta_rows(fw, begin, length, fasta_seq, prev):
+    rows = [[prev['chr'], str(begin), prev['stop'], prev['strand'], prev['gene_id'], prev['transcript_id'], str(length), prev['exon']],
+            [fasta_seq]]
+    for row in rows:
+        fw.write('_'.join(row) + '\n')
+
+def generate_files(tab_in_file, tab_out_file, fasta_out_file):
         # Get the reader
         tab_reader = csv.DictReader(tab_in_file, delimiter='\t')
 
@@ -45,6 +51,7 @@ def generate_tab_file(tab_in_file, tab_out_file):
                     # Write the new row to the output
                     length = int(prev_line['stop']) - begin + 1
                     write_tab_row(tab_writer, begin, length, fasta_seq, prev_line)
+                    write_fasta_rows(fasta_out_file, begin, length, fasta_seq, prev_line)
                     begin = int(curr_line['start'])
                     fasta_seq = curr_line['FASTA_seq']
 
@@ -60,6 +67,7 @@ def generate_tab_file(tab_in_file, tab_out_file):
                 # Print the last row
                 length = int(prev_line['stop']) - begin + 1
                 write_tab_row(tab_writer, begin, length, fasta_seq, prev_line)
+                write_fasta_rows(fasta_out_file, begin, length, fasta_seq, prev_line)
                 break
 
 def generate_fasta_file(tab_in_file, fasta_out_file):
@@ -103,11 +111,8 @@ def main():
     fasta_out_path = os.path.join(output_path, fmt_fasta_out_path(args.input))
     print("Writing output to ./" + output_path + "...")
 
-    with open(args.input, newline='') as tab_in_file, open(tab_out_path, mode='w', newline='') as tab_out_file:
-        generate_tab_file(tab_in_file, tab_out_file)
-
-    with open(tab_out_path, mode='r', newline='') as tab_out_file, open(fasta_out_path, mode='w', newline='') as fasta_out_file:
-        generate_fasta_file(tab_out_file, fasta_out_file)
+    with open(args.input, newline='') as tab_in_file, open(tab_out_path, mode='w', newline='') as tab_out_file, open(fasta_out_path, mode='w') as fasta_out_file:
+        generate_files(tab_in_file, tab_out_file, fasta_out_file)
 
     print("Done.")
 
